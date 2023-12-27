@@ -5,6 +5,15 @@ using backend.Repository;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+var foo = "_MyFooCors";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(foo, policy =>
+    {
+        policy.AllowAnyOrigin();
+    });
+});
 
 var mapperConfig = new MapperConfiguration(cfg =>
 {
@@ -26,6 +35,8 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+
+app.UseCors(foo);
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -35,13 +46,13 @@ app.UseSwaggerUI(c =>
 app.MapGet("/", () => "Hello World!");
 
 app.MapGet("/meals/{id}", (long id) => mapper.Map<MealDto>(mealRepository.GetById(id)));
-app.MapGet("/meals", (long id) => mapper.Map<List<MealDto>>(mealRepository.GetAll()));
+app.MapGet("/meals", () => mapper.Map<List<MealDto>>(mealRepository.GetAll()));
 app.MapPost("/meals", (MealDto dto) => mapper.Map<MealDto>(mealRepository.Create(mapper.Map<Meal>(dto))));
 app.MapDelete("/meals/{id}", (long id) => mapper.Map<MealDto>(mealRepository.Delete(id)));
 app.MapPut("/meals", (MealDto update) => mapper.Map<MealDto>(mealRepository.Update(mapper.Map<Meal>(update))));
 
 app.MapGet("/recipes/{id}", (long id) => mapper.Map<RecipeDto>(recipeRepository.GetById(id)));
-app.MapGet("/recipes", (long id) => mapper.Map<List<RecipeDto>>(recipeRepository.GetAll()));
+app.MapGet("/recipes", () => mapper.Map<List<RecipeDto>>(recipeRepository.GetAll()));
 app.MapPost("/recipes", (RecipeDto dto) => mapper.Map<RecipeDto>(recipeRepository.Create(mapper.Map<Recipe>(dto))));
 app.MapDelete("/recipes/{id}", (long id) => mapper.Map<RecipeDto>(recipeRepository.Delete(id)));
 app.MapPut("/recipes", (RecipeDto update) => mapper.Map<RecipeDto>(recipeRepository.Update(mapper.Map<Recipe>(update))));
