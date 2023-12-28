@@ -1,0 +1,74 @@
+{
+	"root": true,
+	"extends": [
+		"eslint:recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:svelte/recommended",
+		"prettier"
+	],
+	"parser": "@typescript-eslint/parser",
+	"plugins": ["@typescript-eslint", "prettier", "no-relative-import-paths", "no-only-tests"],
+	"parserOptions": {
+		"sourceType": "module",
+		"ecmaVersion": 2020,
+		"extraFileExtensions": [".svelte"],
+		"project": ["./tsconfig.json"]
+	},
+	"rules": {
+		"@typescript-eslint/no-unused-expressions": "off",
+		"@typescript-eslint/await-thenable": "error",
+		"no-only-tests/no-only-tests": "error",
+		"no-prototype-builtins": "off",
+		"operator-linebreak": "off",
+		"arrow-body-style": "off",
+		"implicit-arrow-linebreak": "off",
+		"function-paren-newline": "off",
+		"no-return-assign": "warn",
+		"arrow-parens": "off",
+		"no-shadow": "off",
+		"no-param-reassign": "warn",
+		"class-methods-use-this": "off",
+		"curly": ["error", "all"],
+		"brace-style": ["error", "1tbs"],
+		"@typescript-eslint/ban-types": "warn",
+		"@typescript-eslint/no-shadow": "off",
+		"@typescript-eslint/no-unnecessary-type-constraint": "off",
+		"@typescript-eslint/no-unused-vars": "warn",
+		"max-len": [
+			"error",
+			{
+			  "code": 160
+			}
+		],
+		"@typescript-eslint/explicit-function-return-type": [
+			"warn",
+			{
+				"allowExpressions": true,
+				"allowTypedFunctionExpressions": true
+			}
+		],
+		"prettier/prettier": ["error"],
+		"@typescript-eslint/indent": [
+			"error",
+			"tab"
+		],
+		"no-relative-import-paths/no-relative-import-paths": [
+			"error",
+			{ "rootDir": "src" }
+		]
+	},
+	"env": {
+		"browser": true,
+		"es2017": true,
+		"node": true
+	},
+	"overrides": [
+		{
+			"files": ["*.svelte"],
+			"parser": "svelte-eslint-parser",
+			"parserOptions": {
+				"parser": "@typescript-eslint/parser"
+			}
+		}
+	]
+}
