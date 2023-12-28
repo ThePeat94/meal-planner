@@ -1,0 +1,14 @@
+{
+    "recommendations": [
+        "svelte.svelte-vscode",
+        "aaron-bond.better-comments",
+        "dbaeumer.vscode-eslint",
+        "k--kato.intellij-idea-keybindings",
+        "zainchen.json",
+        "ms-playwright.playwright",
+        "esbenp.prettier-vscode",
+        "rvest.vs-code-prettier-eslint",
+        "zixuanchen.vitest-explorer",
+        "deinsoftware.vitest-snippets"
+    ]
+}
