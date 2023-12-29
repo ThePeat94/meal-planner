@@ -4,7 +4,7 @@
 	"prettier.useTabs": true,
 	"prettier.configPath": ".prettierrc",
 	"eslint.format.enable": false,
-	"eslint.run": "onSave",
+	"eslint.run": "onType",
 	"eslint.validate": ["typescript", "javascript", "svelte"],
 	"editor.formatOnSave": true,
 	"editor.codeActionsOnSave": {

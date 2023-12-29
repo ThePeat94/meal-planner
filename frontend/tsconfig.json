@@ -10,13 +10,9 @@
 		"sourceMap": true,
 		"strict": true,
 		"moduleResolution": "bundler",
-		"baseUrl": "src/",
-		"paths": {
-            "src/*": [
-                "./src/*"
-            ],
-        },
-	}
+		"baseUrl": "src/"
+	},
+	"include": ["src", "postcss.config.cjs", "vite.config.ts", "playwright.config.ts"]
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 	//
 	// If you want to overwrite includes/excludes, make sure to copy over the relevant includes/excludes
