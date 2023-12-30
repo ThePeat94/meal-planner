@@ -1,17 +1,18 @@
 <script lang="ts">
-	import '../app.pcss';
+	import 'app.pcss';
 	import { browser } from '$app/environment';
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
 	import { SvelteQueryDevtools } from '@tanstack/svelte-query-devtools';
-    import { AppShell } from '@skeletonlabs/skeleton';
+	import { AppRail, AppRailAnchor, AppShell } from '@skeletonlabs/skeleton';
 	import axios from 'axios';
+	import { page } from '$app/stores';
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {
-				enabled: browser
-			}
-		}
+				enabled: browser,
+			},
+		},
 	});
 
 	axios.defaults.baseURL = 'localhost:5190';
@@ -22,18 +23,26 @@
 </script>
 
 <QueryClientProvider client={queryClient}>
-    <AppShell slotSidebarLeft="bg-surface-500/5 w-56 p-4">
-        <svelte:fragment slot="sidebarLeft">
-            <!-- Insert the list: -->
-            <nav class="list-nav">
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/about">About</a></li>
-                </ul>
-            </nav>
-            <!-- --- -->
-        </svelte:fragment>
-        <slot/>
-    </AppShell>
-	<SvelteQueryDevtools/>
+	<AppShell slotSidebarLeft="bg-surface-500/5 p-4">
+		<svelte:fragment slot="sidebarLeft">
+			<AppRail>
+				<svelte:fragment slot="lead">
+					<AppRailAnchor href="/" title="Home" selected={$page.url.pathname === '/'}>
+						Home
+					</AppRailAnchor>
+					<AppRailAnchor
+						href="/recipes"
+						title="Account"
+						selected={$page.url.pathname === '/recipes'}
+					>
+						Recipes
+					</AppRailAnchor>
+				</svelte:fragment>
+			</AppRail>
+		</svelte:fragment>
+		<div class="p-4">
+			<slot />
+		</div>
+	</AppShell>
+	<SvelteQueryDevtools />
 </QueryClientProvider>
