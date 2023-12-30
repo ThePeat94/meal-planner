@@ -3,9 +3,12 @@
 	import { browser } from '$app/environment';
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
 	import { SvelteQueryDevtools } from '@tanstack/svelte-query-devtools';
-	import { AppRail, AppRailAnchor, AppShell } from '@skeletonlabs/skeleton';
+	import { AppRail, AppRailAnchor, AppShell, Modal } from '@skeletonlabs/skeleton';
 	import axios from 'axios';
 	import { page } from '$app/stores';
+	import { initializeStores } from '@skeletonlabs/skeleton';
+
+	initializeStores();
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -23,6 +26,7 @@
 </script>
 
 <QueryClientProvider client={queryClient}>
+	<Modal />
 	<AppShell slotSidebarLeft="bg-surface-500/5 p-4">
 		<svelte:fragment slot="sidebarLeft">
 			<AppRail>

@@ -3,6 +3,6 @@
 	export let onClick: () => void = () => {};
 </script>
 
-<button type="button" class="variant-filled-primary btn" name={text} on:click={() => onClick()}>
+<button type="button" class="variant-filled-primary btn" name={text} on:click={onClick}>
 	{text}
 </button>
