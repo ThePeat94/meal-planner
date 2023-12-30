@@ -1,28 +1,14 @@
 <script lang="ts">
 	import { getModalStore } from '@skeletonlabs/skeleton';
 	import { AppBar, type ModalSettings } from '@skeletonlabs/skeleton';
-	import { createRecipe, getAllRecipes } from 'api/recipes';
+	import { getAllRecipes } from 'api/recipes';
 	import Card from 'components/Card.svelte';
 	import PrimaryButton from 'components/buttons/PrimaryButton.svelte';
 
-	const mutation = createRecipe();
 	const modalStore = getModalStore();
 	const modal: ModalSettings = {
-		type: 'prompt',
-		// Data
-		title: 'Enter Recipe name',
-		body: 'Provide a Recipe name below',
-		// Populates the input value and attributes
-		value: '',
-		valueAttr: { type: 'text', minlength: 3, required: true },
-		// Returns the updated response value
-		response: (r: string | false | undefined) => {
-			if (!r) {
-				return;
-			}
-
-			$mutation.mutate({ name: r });
-		},
+		type: 'component',
+		component: 'createRecipeDialog',
 	};
 
 	const handleModalOpen = (): void => {

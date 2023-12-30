@@ -7,6 +7,7 @@
 	import axios from 'axios';
 	import { page } from '$app/stores';
 	import { initializeStores } from '@skeletonlabs/skeleton';
+	import CreateRecipeDialog from 'dialogs/CreateRecipeDialog.svelte';
 
 	initializeStores();
 
@@ -26,7 +27,7 @@
 </script>
 
 <QueryClientProvider client={queryClient}>
-	<Modal />
+	<Modal components={{ createRecipeDialog: { ref: CreateRecipeDialog } }} />
 	<AppShell slotSidebarLeft="bg-surface-500/5 p-4">
 		<svelte:fragment slot="sidebarLeft">
 			<AppRail>
