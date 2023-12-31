@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getModalStore } from '@skeletonlabs/skeleton';
 	import { AppBar, type ModalSettings } from '@skeletonlabs/skeleton';
-	import { getAllRecipes } from 'api/recipes';
+	import { getAllRecipes, type Recipe } from 'api/recipes';
 	import Card from 'components/Card.svelte';
 	import PrimaryButton from 'components/buttons/PrimaryButton.svelte';
 
@@ -11,8 +11,17 @@
 		component: 'createRecipeDialog',
 	};
 
+	const mealModal: ModalSettings = {
+		type: 'component',
+		component: 'createMealDialog',
+	};
+
 	const handleModalOpen = (): void => {
 		modalStore.trigger(modal);
+	};
+
+	const handleCreateMealForRecipe = (recipe: Recipe): void => {
+		modalStore.trigger({ ...mealModal, meta: { recipe } });
 	};
 
 	const query = getAllRecipes();
@@ -47,13 +56,13 @@
 	<div class="grid grid-cols-2 gap-4">
 		{#each $query.data as recipe}
 			{#if recipe.description}
-				<Card>
+				<Card onClick={() => handleCreateMealForRecipe(recipe)}>
 					<div slot="header">{recipe.id}</div>
 					<div slot="content">{recipe.name}</div>
 					<div slot="footer">{recipe.description}</div>
 				</Card>
 			{:else}
-				<Card>
+				<Card onClick={() => handleCreateMealForRecipe(recipe)}>
 					<div slot="header">{recipe.id}</div>
 					<div slot="content">{recipe.name}</div>
 				</Card>

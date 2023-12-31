@@ -1,4 +1,18 @@
-<div class="card">
+<script lang="ts">
+	export let onClick: () => void = () => {};
+</script>
+
+<div
+	class="card card-hover"
+	role="cell"
+	tabindex={1}
+	on:click={onClick}
+	on:keydown={(k) => {
+		if (k.code === 'Enter') {
+			onClick();
+		}
+	}}
+>
 	<header class="card-header">
 		<slot name="header" />
 	</header>

@@ -8,9 +8,13 @@ import {
 import axios, { type AxiosRequestConfig } from 'axios';
 
 export type Recipe = {
-	id?: number;
+	id: number;
 	name: string;
 	description?: string;
+};
+
+export type CreateRecipe = {
+	name: string;
 };
 
 const fetchRecipes = async (config: AxiosRequestConfig): Promise<Recipe[]> => {
@@ -34,9 +38,9 @@ const postRecipe = async (name: string, config?: AxiosRequestConfig): Promise<Re
 	return request.data;
 };
 
-export const createRecipe = (): CreateMutationResult<Recipe, Error, Recipe> => {
+export const createRecipe = (): CreateMutationResult<Recipe, Error, CreateRecipe> => {
 	const client = useQueryClient();
-	return createMutation<Recipe, Error, Recipe>({
+	return createMutation<Recipe, Error, CreateRecipe>({
 		mutationFn: async (r) => await postRecipe(r.name),
 		onSettled: () => client.invalidateQueries({ queryKey: ['recipes'] }),
 	});

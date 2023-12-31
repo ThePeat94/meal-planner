@@ -24,6 +24,7 @@
 
 	const formData: FormCreation = {
 		at: $modalStore[0].meta?.at ? format($modalStore[0].meta.at, "yyyy-MM-dd'T'hh:mm") : undefined,
+		recipe: $modalStore[0].meta?.recipe,
 	};
 	console.log(formData.at);
 
@@ -51,7 +52,7 @@
 <!-- @component This example creates a simple form modal. -->
 {#if $modalStore[0]}
 	<div class="modal-example-form {cBase}">
-		<header class={cHeader}>Create a Recipe</header>
+		<header class={cHeader}>Add a Meal</header>
 		<!-- Enable for debugging: -->
 		<form class="modal-form {cForm}">
 			<label class="label">
