@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { AppBar, getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+	import { getAllMeals, type Meal } from 'api/meals';
 	import PrimaryButton from 'components/buttons/PrimaryButton.svelte';
-	import { getDaysInMonth } from 'date-fns';
+	import { format, getDaysInMonth, isSameDay } from 'date-fns';
 
 	const modalStore = getModalStore();
 
@@ -12,6 +13,25 @@
 
 	const handleDialogOpen = (): void => {
 		modalStore.trigger(modal);
+	};
+
+	const handleDialogOpenForDay = (day: number): void => {
+		const date = new Date();
+		date.setDate(day);
+		modalStore.trigger({ ...modal, meta: { at: date } });
+	};
+
+	$: meals = getAllMeals();
+	const getMealForDay = (day: number): Meal[] => {
+		if (!$meals.data || $meals.data.length === 0) {
+			return [];
+		}
+		const date = new Date();
+		date.setDate(day);
+
+		const foundMeal = $meals.data?.filter((m) => isSameDay(m.at, date));
+
+		return foundMeal ?? [];
 	};
 
 	const currentDate = new Date();
@@ -25,12 +45,34 @@
 	</svelte:fragment>
 </AppBar>
 
-<div>
-	<div class="grid grid-cols-7 gap-1">
-		{#each Array(dayCount) as _, day}
-			<div class="h-40 rounded-lg bg-emerald-100 transition-colors hover:bg-emerald-500">
-				{day + 1}
-			</div>
-		{/each}
+{#if $meals.isSuccess && !$meals.isRefetching}
+	<div>
+		<div class="grid grid-cols-7 gap-1">
+			{#each Array(dayCount) as _, day}
+				<div
+					class="h-40 rounded-lg bg-emerald-100 transition-colors hover:bg-emerald-500"
+					role="cell"
+					tabindex={day + 1}
+					on:click={() => handleDialogOpenForDay(day + 1)}
+					on:keydown={(k) => {
+						if (k.code === 'Enter') {
+							handleDialogOpenForDay(day + 1);
+						}
+					}}
+				>
+					<div class="grid grid-cols-1 p-2">
+						<div>
+							{day + 1}
+						</div>
+						{#each getMealForDay(day + 1) as meal}
+							<div>
+								{meal.recipe.name}
+								{format(meal.at, 'HH:mm')}
+							</div>
+						{/each}
+					</div>
+				</div>
+			{/each}
+		</div>
 	</div>
-</div>
+{/if}

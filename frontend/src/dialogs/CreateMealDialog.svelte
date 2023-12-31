@@ -7,6 +7,7 @@
 	import ErrorButton from 'components/buttons/ErrorButton.svelte';
 	import { createMeal } from 'api/meals';
 	import { getAllRecipes, type Recipe } from 'api/recipes';
+	import { format } from 'date-fns';
 
 	// Props
 	/** Exposes parent props to this component. */
@@ -21,7 +22,10 @@
 		recipe?: Recipe;
 	};
 
-	const formData: FormCreation = {};
+	const formData: FormCreation = {
+		at: $modalStore[0].meta?.at ? format($modalStore[0].meta.at, "yyyy-MM-dd'T'hh:mm") : undefined,
+	};
+	console.log(formData.at);
 
 	// We've created a custom submit function to pass the response and close the modal.
 	const handleCreation = (): void => {
@@ -31,6 +35,7 @@
 		}
 
 		$createMealMutation.mutate({ at: formData.at, recipe: formData.recipe });
+		modalStore.close();
 	};
 
 	const handleClose = (): void => {
