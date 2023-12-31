@@ -50,7 +50,7 @@
 		<div class="grid grid-cols-7 gap-1">
 			{#each Array(dayCount) as _, day}
 				<div
-					class="h-40 rounded-lg bg-emerald-100 transition-colors hover:bg-emerald-500"
+					class="z-0 h-40 rounded-lg bg-emerald-100 transition-colors hover:bg-emerald-500"
 					role="cell"
 					tabindex={day + 1}
 					on:click={() => handleDialogOpenForDay(day + 1)}
@@ -60,12 +60,18 @@
 						}
 					}}
 				>
-					<div class="grid grid-cols-1 p-2">
+					<div class="grid grid-cols-1 gap-1 p-2">
 						<div>
 							{day + 1}
 						</div>
 						{#each getMealForDay(day + 1) as meal}
-							<div>
+							<div
+								class="z-10 rounded-lg bg-sky-300 p-1 transition-colors hover:bg-sky-500"
+								role="cell"
+								tabindex={day + 1}
+								on:click={(mouseEvent) => mouseEvent.stopPropagation()}
+								on:keydown={(keyEvent) => keyEvent.stopPropagation()}
+							>
 								{meal.recipe.name}
 								{format(meal.at, 'HH:mm')}
 							</div>
