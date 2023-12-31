@@ -22,7 +22,7 @@
 	};
 
 	$: meals = getAllMeals();
-	const getMealForDay = (day: number): Meal[] => {
+	const getMealsForDay = (day: number): Meal[] => {
 		if (!$meals.data || $meals.data.length === 0) {
 			return [];
 		}
@@ -64,7 +64,7 @@
 						<div>
 							{day + 1}
 						</div>
-						{#each getMealForDay(day + 1) as meal}
+						{#each getMealsForDay(day + 1) as meal}
 							<div
 								class="z-10 rounded-lg bg-sky-300 p-1 transition-colors hover:bg-sky-500"
 								role="cell"
