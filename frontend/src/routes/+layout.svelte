@@ -19,6 +19,26 @@
 		},
 	});
 
+	type Route = {
+		name: string;
+		link: string;
+	};
+
+	const routes: Route[] = [
+		{
+			name: 'Home',
+			link: '/',
+		},
+		{
+			name: 'Meal Plan',
+			link: '/mealplans',
+		},
+		{
+			name: 'Recipe',
+			link: '/recipes',
+		},
+	];
+
 	axios.defaults.baseURL = 'localhost:5190';
 	axios.defaults.headers.post['Content-Type'] = 'application/json';
 	axios.defaults.headers.post['Accept'] = 'application/json';
@@ -32,16 +52,15 @@
 		<svelte:fragment slot="sidebarLeft">
 			<AppRail>
 				<svelte:fragment slot="lead">
-					<AppRailAnchor href="/" title="Home" selected={$page.url.pathname === '/'}>
-						Home
-					</AppRailAnchor>
-					<AppRailAnchor
-						href="/recipes"
-						title="Account"
-						selected={$page.url.pathname === '/recipes'}
-					>
-						Recipes
-					</AppRailAnchor>
+					{#each routes as route}
+						<AppRailAnchor
+							href={route.link}
+							title={route.name}
+							selected={$page.url.pathname === route.link}
+						>
+							{route.name}
+						</AppRailAnchor>
+					{/each}
 				</svelte:fragment>
 			</AppRail>
 		</svelte:fragment>

@@ -54,6 +54,7 @@
 	"dependencies": {
 		"@tanstack/svelte-query": "^5.15.0",
 		"axios": "^1.6.3",
+		"date-fns": "^3.0.6",
 		"vite-tsconfig-paths": "^4.2.2"
 	}
 }

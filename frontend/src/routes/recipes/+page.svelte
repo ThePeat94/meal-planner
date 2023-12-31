@@ -19,14 +19,14 @@
 </script>
 
 <AppBar class="mb-4">
-	<svelte:fragment slot="lead">Recipe leads</svelte:fragment>
+	<svelte:fragment slot="lead">Recipes</svelte:fragment>
 	<svelte:fragment slot="trail">
 		<PrimaryButton text="Create Recipe" onClick={handleModalOpen} />
 	</svelte:fragment>
 </AppBar>
 
 {#if $query.isLoading}
-	<div class="grid grid-cols-2 gap-4">
+	<div class="grid grid-cols-4 gap-4">
 		{#each Array(20) as _}
 			<Card>
 				<div slot="header" class="placeholder animate-pulse"></div>
