@@ -8,6 +8,7 @@
 	import { createMeal } from 'api/meals';
 	import { getAllRecipes, type Recipe } from 'api/recipes';
 	import { format } from 'date-fns';
+	import Select from 'components/Select.svelte';
 
 	// Props
 	/** Exposes parent props to this component. */
@@ -16,6 +17,11 @@
 	const modalStore = getModalStore();
 	const createMealMutation = createMeal();
 	const allRecipes = getAllRecipes();
+	const recipeOptions =
+		$allRecipes.data?.map((r) => ({
+			label: r.name,
+			value: r,
+		})) ?? [];
 
 	type FormCreation = {
 		at?: string;
@@ -23,7 +29,7 @@
 	};
 
 	const formData: FormCreation = {
-		at: $modalStore[0].meta?.at ? format($modalStore[0].meta.at, "yyyy-MM-dd'T'hh:mm") : undefined,
+		at: $modalStore[0].meta?.at ? format($modalStore[0].meta.at, "yyyy-MM-dd'T'HH:mm") : undefined,
 		recipe: $modalStore[0].meta?.recipe,
 	};
 	console.log(formData.at);
@@ -55,16 +61,7 @@
 		<header class={cHeader}>Add a Meal</header>
 		<!-- Enable for debugging: -->
 		<form class="modal-form {cForm}">
-			<label class="label">
-				<span>Recipe</span>
-				<select class="select p-2" bind:value={formData.recipe}>
-					{#if $allRecipes.isSuccess}
-						{#each $allRecipes.data as recipe}
-							<option value={recipe}>{recipe.name}</option>
-						{/each}
-					{/if}
-				</select>
-			</label>
+			<Select options={recipeOptions} value={formData.recipe} label={'Recipes'} />
 			<label class="label">
 				<span>Date</span>
 				<input type="datetime-local" class="input p-2" bind:value={formData.at} />
