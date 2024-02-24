@@ -17,7 +17,7 @@
 	const modalStore = getModalStore();
 	const createMealMutation = createMeal();
 	const allRecipes = getAllRecipes();
-	const recipeOptions =
+	$: recipeOptions =
 		$allRecipes.data?.map((r) => ({
 			label: r.name,
 			value: r,
@@ -61,7 +61,7 @@
 		<header class={cHeader}>Add a Meal</header>
 		<!-- Enable for debugging: -->
 		<form class="modal-form {cForm}">
-			<Select options={recipeOptions} value={formData.recipe} label={'Recipes'} />
+			<Select options={recipeOptions} bind:value={formData.recipe} label={'Recipes'} />
 			<label class="label">
 				<span>Date</span>
 				<input type="datetime-local" class="input p-2" bind:value={formData.at} />

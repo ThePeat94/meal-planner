@@ -8,7 +8,7 @@
 	"eslint.validate": ["typescript", "javascript", "svelte"],
 	"editor.formatOnSave": true,
 	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": true
+		"source.fixAll.eslint": "explicit"
 	},
 	"[svelte]": {
         "editor.defaultFormatter": "svelte.svelte-vscode",

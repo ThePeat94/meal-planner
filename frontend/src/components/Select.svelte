@@ -1,6 +1,10 @@
-<script lang="ts">
-	export let value: unknown | undefined;
-	export let options: { label: string; value: unknown }[];
+<script lang="ts" generics="T">
+	import type { SelectOption } from 'components/types/SelectOption';
+
+	// eslint-disable-next-line no-undef
+	export let value: T | undefined;
+	// eslint-disable-next-line no-undef
+	export let options: SelectOption<T>[];
 	export let label: string;
 </script>
 
