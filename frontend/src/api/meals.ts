@@ -15,6 +15,11 @@ export type Meal = {
 	recipe: Recipe;
 };
 
+export type CreateMeal = {
+	at: string;
+	recipe: Recipe;
+};
+
 const fetchMeals = async (config?: AxiosRequestConfig): Promise<Meal[]> => {
 	const request = await axios.get<Meal[]>('http://localhost:5190/meals', { ...config });
 	return request.data;
@@ -27,14 +32,14 @@ export const getAllMeals = (): CreateQueryResult<Meal[]> => {
 	});
 };
 
-const postMeal = async (meal: Meal, config?: AxiosRequestConfig): Promise<Meal> => {
+const postMeal = async (meal: CreateMeal, config?: AxiosRequestConfig): Promise<Meal> => {
 	const request = await axios.post<Meal>('http://localhost:5190/meals', meal, { ...config });
 	return request.data;
 };
 
-export const createMeal = (): CreateMutationResult<Meal, Error, Meal> => {
+export const createMeal = (): CreateMutationResult<Meal, Error, CreateMeal> => {
 	const client = useQueryClient();
-	return createMutation<Meal, Error, Meal>({
+	return createMutation<Meal, Error, CreateMeal>({
 		mutationFn: async (m) => await postMeal(m),
 		onSettled: () => client.invalidateQueries({ queryKey: ['meals'] }),
 	});

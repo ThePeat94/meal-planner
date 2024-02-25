@@ -1,0 +1,1 @@
+type LegitDateTypes = Date | string;

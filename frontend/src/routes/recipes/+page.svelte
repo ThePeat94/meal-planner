@@ -4,6 +4,7 @@
 	import { getAllRecipes, type Recipe } from 'api/recipes';
 	import Card from 'components/Card.svelte';
 	import PrimaryButton from 'components/buttons/PrimaryButton.svelte';
+	import RecipeCard from 'components/recipes/RecipeCard.svelte';
 
 	const modalStore = getModalStore();
 	const modal: ModalSettings = {
@@ -55,18 +56,7 @@
 {#if $query.isSuccess}
 	<div class="grid grid-cols-2 gap-4">
 		{#each $query.data as recipe}
-			{#if recipe.description}
-				<Card onClick={() => handleCreateMealForRecipe(recipe)}>
-					<div slot="header">{recipe.id}</div>
-					<div slot="content">{recipe.name}</div>
-					<div slot="footer">{recipe.description}</div>
-				</Card>
-			{:else}
-				<Card onClick={() => handleCreateMealForRecipe(recipe)}>
-					<div slot="header">{recipe.id}</div>
-					<div slot="content">{recipe.name}</div>
-				</Card>
-			{/if}
+			<RecipeCard {recipe} onClick={() => handleCreateMealForRecipe(recipe)} />
 		{/each}
 	</div>
 {/if}

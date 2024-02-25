@@ -32,7 +32,6 @@
 		at: $modalStore[0].meta?.at ? format($modalStore[0].meta.at, "yyyy-MM-dd'T'HH:mm") : undefined,
 		recipe: $modalStore[0].meta?.recipe,
 	};
-	console.log(formData.at);
 
 	// We've created a custom submit function to pass the response and close the modal.
 	const handleCreation = (): void => {

@@ -3,6 +3,7 @@
 	import { getAllMeals, type Meal } from 'api/meals';
 	import PrimaryButton from 'components/buttons/PrimaryButton.svelte';
 	import { format, getDaysInMonth, isSameDay } from 'date-fns';
+	import { sortAsc, sortByDate } from 'utils/sortUtils';
 
 	const modalStore = getModalStore();
 
@@ -29,9 +30,9 @@
 		const date = new Date();
 		date.setDate(day);
 
-		const foundMeal = $meals.data?.filter((m) => isSameDay(m.at, date));
-
-		return foundMeal ?? [];
+		let foundMeals = $meals.data?.filter((m) => isSameDay(m.at, date));
+		foundMeals = foundMeals.sort((a, b) => sortByDate(a.at, b.at, sortAsc));
+		return foundMeals ?? [];
 	};
 
 	const currentDate = new Date();
@@ -57,6 +58,7 @@
 					on:keydown={(k) => {
 						if (k.code === 'Enter') {
 							handleDialogOpenForDay(day + 1);
+							return;
 						}
 					}}
 				>

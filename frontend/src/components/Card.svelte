@@ -10,6 +10,7 @@
 	on:keydown={(k) => {
 		if (k.code === 'Enter') {
 			onClick();
+			return;
 		}
 	}}
 >
