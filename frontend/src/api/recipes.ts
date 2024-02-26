@@ -22,6 +22,11 @@ const fetchRecipes = async (config: AxiosRequestConfig): Promise<Recipe[]> => {
 	return request.data;
 };
 
+const fetchRecipe = async (id: number, config: AxiosRequestConfig): Promise<Recipe> => {
+	const request = await axios.get<Recipe>('http://localhost:5190/recipes/' + id, { ...config });
+	return request.data;
+};
+
 export const getAllRecipes = (): CreateQueryResult<Recipe[]> => {
 	return createQuery<Recipe[]>({
 		queryKey: ['recipes'],
@@ -43,5 +48,12 @@ export const createRecipe = (): CreateMutationResult<Recipe, Error, CreateRecipe
 	return createMutation<Recipe, Error, CreateRecipe>({
 		mutationFn: async (r) => await postRecipe(r.name),
 		onSettled: () => client.invalidateQueries({ queryKey: ['recipes'] }),
+	});
+};
+
+export const getRecipe = (id: number): CreateQueryResult<Recipe> => {
+	return createQuery<Recipe>({
+		queryKey: ['recipes', id],
+		queryFn: async ({ signal }) => await fetchRecipe(id, { signal }),
 	});
 };

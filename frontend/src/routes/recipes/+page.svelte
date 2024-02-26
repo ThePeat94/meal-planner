@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { getModalStore } from '@skeletonlabs/skeleton';
 	import { AppBar, type ModalSettings } from '@skeletonlabs/skeleton';
 	import { getAllRecipes, type Recipe } from 'api/recipes';
@@ -25,7 +26,11 @@
 		modalStore.trigger({ ...mealModal, meta: { recipe } });
 	};
 
-	const query = getAllRecipes();
+	const handleCardClick = (recipe: Recipe): void => {
+		goto('/recipes/' + recipe.id);
+	};
+
+	$: query = getAllRecipes();
 </script>
 
 <AppBar class="mb-4">
@@ -56,7 +61,11 @@
 {#if $query.isSuccess}
 	<div class="grid grid-cols-2 gap-4">
 		{#each $query.data as recipe}
-			<RecipeCard {recipe} onClick={() => handleCreateMealForRecipe(recipe)} />
+			<RecipeCard
+				{recipe}
+				onClick={() => handleCreateMealForRecipe(recipe)}
+				onCardClick={() => handleCardClick(recipe)}
+			/>
 		{/each}
 	</div>
 {/if}
