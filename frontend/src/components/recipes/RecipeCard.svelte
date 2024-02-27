@@ -9,11 +9,12 @@
 </script>
 
 <Card onClick={onCardClick}>
-	<div slot="header">{recipe.id}</div>
+	<div slot="header">{recipe.name}</div>
 	<div slot="content">
-		{recipe.name}
 		{#if recipe.description}
-			{recipe?.description}
+			<p>
+				{recipe?.description}
+			</p>
 		{/if}
 	</div>
 	<div slot="footer">
