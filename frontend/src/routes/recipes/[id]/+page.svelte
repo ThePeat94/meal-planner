@@ -34,7 +34,9 @@
 	</AppBar>
 	<div class="grid grid-cols-4 gap-4">
 		<div class="relative col-span-2 col-start-2 mt-2 rounded-md shadow-sm">
-			<label for="name" class="block text-sm font-medium leading-6 text-gray-900">Name</label>
+			<label for="name" class="block text-sm font-medium leading-6 text-black dark:text-white">
+				Name
+			</label>
 			<input
 				type="text"
 				name={'name'}
@@ -46,7 +48,10 @@
 			/>
 		</div>
 		<div class="relative col-span-2 col-start-2 mt-2 rounded-md shadow-sm">
-			<label for="description" class="block text-sm font-medium leading-6 text-gray-900">
+			<label
+				for="description"
+				class="block text-sm font-medium leading-6 text-black dark:text-white"
+			>
 				Description
 			</label>
 			<textarea
