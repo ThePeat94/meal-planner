@@ -13,6 +13,16 @@
 		component: 'createMealDialog',
 	};
 
+	$: meals = getAllMeals();
+
+	const currentDate = new Date();
+
+	let selectedMonth = currentDate.getMonth();
+	let selectedYear = currentDate.getFullYear();
+
+	$: selectedDate = new Date(selectedYear, selectedMonth);
+	$: dayCount = getDaysInMonth(selectedDate);
+
 	const handleDialogOpen = (): void => {
 		modalStore.trigger(modal);
 	};
@@ -23,26 +33,17 @@
 		modalStore.trigger({ ...modal, meta: { at: date } });
 	};
 
-	$: meals = getAllMeals();
 	const getMealsForDay = (day: number): Meal[] => {
 		if (!$meals.data || $meals.data.length === 0) {
 			return [];
 		}
-		const date = new Date();
-		date.setDate(day);
+		const copiedDate = new Date(selectedDate);
+		copiedDate.setDate(day);
 
-		let foundMeals = $meals.data?.filter((m) => isSameDay(m.at, date));
+		let foundMeals = $meals.data?.filter((m) => isSameDay(m.at, copiedDate));
 		foundMeals = foundMeals.sort((a, b) => sortByDate(a.at, b.at, sortAsc));
 		return foundMeals ?? [];
 	};
-
-	const currentDate = new Date();
-
-	let selectedMonth = currentDate.getMonth();
-	let selectedYear = currentDate.getFullYear();
-
-	$: selectedDate = new Date(selectedYear, selectedMonth);
-	$: dayCount = getDaysInMonth(selectedDate);
 </script>
 
 <AppBar class="mb-4">
@@ -83,18 +84,20 @@
 						{day + 1}
 					</div>
 					{#if $meals.isSuccess && !$meals.isRefetching}
-						{#each getMealsForDay(day + 1) as meal}
-							<div
-								class="z-10 rounded-lg bg-sky-300 p-1 transition-colors hover:bg-sky-500 dark:bg-sky-600"
-								role="cell"
-								tabindex={day + 1}
-								on:click={(mouseEvent) => mouseEvent.stopPropagation()}
-								on:keydown={(keyEvent) => keyEvent.stopPropagation()}
-							>
-								{meal.recipe.name}
-								{format(meal.at, 'HH:mm')}
-							</div>
-						{/each}
+						{#key selectedDate}
+							{#each getMealsForDay(day + 1) as meal}
+								<div
+									class="z-10 rounded-lg bg-sky-300 p-1 transition-colors hover:bg-sky-500 dark:bg-sky-600"
+									role="cell"
+									tabindex={day + 1}
+									on:click={(mouseEvent) => mouseEvent.stopPropagation()}
+									on:keydown={(keyEvent) => keyEvent.stopPropagation()}
+								>
+									{meal.recipe.name}
+									{format(meal.at, 'HH:mm')}
+								</div>
+							{/each}
+						{/key}
 					{/if}
 				</div>
 			</div>
