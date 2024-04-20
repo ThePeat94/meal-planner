@@ -3,7 +3,14 @@
 	import { browser } from '$app/environment';
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
 	import { SvelteQueryDevtools } from '@tanstack/svelte-query-devtools';
-	import { AppRail, AppRailAnchor, AppShell, Modal } from '@skeletonlabs/skeleton';
+	import {
+		AppRail,
+		AppRailAnchor,
+		AppRailTile,
+		AppShell,
+		LightSwitch,
+		Modal,
+	} from '@skeletonlabs/skeleton';
 	import axios from 'axios';
 	import { page } from '$app/stores';
 	import { initializeStores } from '@skeletonlabs/skeleton';
@@ -54,8 +61,11 @@
 			createMealDialog: { ref: CreateMealDialog },
 		}}
 	/>
-	<AppShell slotSidebarLeft="bg-surface-500/5 p-4">
+	<AppShell slotSidebarLeft="bg-surface-500/5">
 		<svelte:fragment slot="sidebarLeft">
+			<AppRailTile>
+				<LightSwitch />
+			</AppRailTile>
 			<AppRail>
 				<svelte:fragment slot="lead">
 					{#each routes as route}
