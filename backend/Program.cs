@@ -1,4 +1,5 @@
 using AutoMapper;
+using backend.Database;
 using backend.Dto;
 using backend.Entity;
 using backend.Repository;
@@ -6,6 +7,8 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var foo = "_MyFooCors";
+
+var dbContext = new MealPlannerContext();
 
 builder.Services.AddCors(options =>
 {
@@ -26,8 +29,8 @@ var mapperConfig = new MapperConfiguration(cfg =>
 });
 
 var mapper = mapperConfig.CreateMapper();
-var mealRepository = new GenericEntityRepository<Meal>();
-var recipeRepository = new GenericEntityRepository<Recipe>();
+var mealRepository = new GenericEntityMemoryRepository<Meal>();
+var recipeRepository = new GenericEntityMemoryRepository<Recipe>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

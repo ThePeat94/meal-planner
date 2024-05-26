@@ -3,9 +3,9 @@ using backend.Entity;
 
 namespace backend.Repository;
 
-public class GenericEntityRepository<T> : ICrudRepository<T> where T : IEntity
+public class GenericEntityMemoryRepository<T> : ICrudRepository<T> where T : IEntity
 {
-    private object m_creationLock = new();
+    private readonly object m_creationLock = new();
     private ConcurrentDictionary<long, T> m_data = new();
     private int m_latestId;
     

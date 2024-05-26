@@ -44,6 +44,19 @@
 		foundMeals = foundMeals.sort((a, b) => sortByDate(a.at, b.at, sortAsc));
 		return foundMeals ?? [];
 	};
+
+	const isToday = (day: number): boolean => {
+		const now = new Date();
+		if (selectedYear != now.getFullYear()) {
+			return false;
+		}
+
+		if (selectedMonth != now.getMonth()) {
+			return false;
+		}
+
+		return now.getDate() === day;
+	};
 </script>
 
 <AppBar class="mb-4">
@@ -66,30 +79,31 @@
 
 <div>
 	<div class="grid grid-cols-7 gap-1">
-		{#each Array(dayCount) as _, day}
+		{#each Array(dayCount) as _, dayIndex}
 			<div
 				class="z-0 h-40 rounded-lg bg-emerald-100 transition-colors hover:bg-emerald-500 dark:bg-emerald-900 dark:hover:bg-emerald-700"
 				role="cell"
-				tabindex={day + 1}
-				on:click={() => handleDialogOpenForDay(day + 1)}
+				tabindex={dayIndex + 1}
+				on:click={() => handleDialogOpenForDay(dayIndex + 1)}
 				on:keydown={(k) => {
 					if (k.code === 'Enter') {
-						handleDialogOpenForDay(day + 1);
+						handleDialogOpenForDay(dayIndex + 1);
 						return;
 					}
 				}}
 			>
 				<div class="grid grid-cols-1 gap-1 p-2">
 					<div>
-						{day + 1}
+						{dayIndex + 1}
+						{#if isToday(dayIndex + 1)}TODAY{/if}
 					</div>
 					{#if $meals.isSuccess && !$meals.isRefetching}
 						{#key selectedDate}
-							{#each getMealsForDay(day + 1) as meal}
+							{#each getMealsForDay(dayIndex + 1) as meal}
 								<div
 									class="z-10 rounded-lg bg-sky-300 p-1 transition-colors hover:bg-sky-500 dark:bg-sky-600"
 									role="cell"
-									tabindex={day + 1}
+									tabindex={dayIndex + 1}
 									on:click={(mouseEvent) => mouseEvent.stopPropagation()}
 									on:keydown={(keyEvent) => keyEvent.stopPropagation()}
 								>
