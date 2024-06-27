@@ -30,7 +30,7 @@ var mapperConfig = new MapperConfiguration(cfg =>
 
 var mapper = mapperConfig.CreateMapper();
 var mealRepository = new GenericEntityMemoryRepository<Meal>();
-var recipeRepository = new GenericEntityMemoryRepository<Recipe>();
+var recipeRepository = new GenericEntityDbRepository<Recipe>(dbContext, dbContext.Recipes);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
