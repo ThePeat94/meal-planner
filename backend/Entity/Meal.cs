@@ -1,6 +1,4 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace backend.Entity;
+namespace Backend.Entity;
 
 public record Meal : IEntity
 {

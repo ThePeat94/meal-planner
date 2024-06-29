@@ -1,4 +1,4 @@
-namespace backend.Entity;
+namespace Backend.Entity;
 
 public record Recipe : IEntity
 {

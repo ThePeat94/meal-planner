@@ -1,4 +1,4 @@
-namespace backend.Dto;
+namespace Backend.Dto;
 
 public class RecipeDto
 {

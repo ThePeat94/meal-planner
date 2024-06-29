@@ -1,8 +1,8 @@
 using AutoMapper;
-using backend.Database;
-using backend.Dto;
-using backend.Entity;
-using backend.Repository;
+using Backend.Database;
+using Backend.Dto;
+using Backend.Entity;
+using Backend.Repository;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
-using backend.Entity;
+using Backend.Entity;
 
-namespace backend.Repository;
+namespace Backend.Repository;
 
 public class GenericEntityMemoryRepository<T> : ICrudRepository<T> where T : IEntity
 {

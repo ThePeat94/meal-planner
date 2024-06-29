@@ -1,5 +1,5 @@
 
-namespace backend.Repository;
+namespace Backend.Repository;
 
 public interface ICrudRepository<T> 
 {

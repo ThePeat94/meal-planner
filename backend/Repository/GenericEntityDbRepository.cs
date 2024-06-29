@@ -1,8 +1,8 @@
-using backend.Database;
-using backend.Entity;
+using Backend.Database;
+using Backend.Entity;
 using Microsoft.EntityFrameworkCore;
 
-namespace backend.Repository;
+namespace Backend.Repository;
 
 class GenericEntityDbRepository<T> : ICrudRepository<T> where T: class, IEntity
 {

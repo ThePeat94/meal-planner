@@ -1,7 +1,7 @@
-using backend.Entity;
+using Backend.Entity;
 using Microsoft.EntityFrameworkCore;
 
-namespace backend.Database;
+namespace Backend.Database;
 
 public class MealPlannerContext : DbContext
 {
