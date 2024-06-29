@@ -29,7 +29,7 @@ var mapperConfig = new MapperConfiguration(cfg =>
 });
 
 var mapper = mapperConfig.CreateMapper();
-var mealRepository = new GenericEntityMemoryRepository<Meal>();
+var mealRepository = new MealRepository(dbContext, dbContext.Meals);
 var recipeRepository = new GenericEntityDbRepository<Recipe>(dbContext, dbContext.Recipes);
 
 builder.Services.AddEndpointsApiExplorer();

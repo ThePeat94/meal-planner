@@ -6,8 +6,8 @@ namespace Backend.Repository;
 
 class GenericEntityDbRepository<T> : ICrudRepository<T> where T: class, IEntity
 {
-    private readonly DbSet<T> m_set;
-    private readonly MealPlannerContext m_context;
+    protected readonly DbSet<T> m_set;
+    protected readonly MealPlannerContext m_context;
     
     public GenericEntityDbRepository(MealPlannerContext context, DbSet<T> set)
     {
@@ -15,20 +15,19 @@ class GenericEntityDbRepository<T> : ICrudRepository<T> where T: class, IEntity
         this.m_context = context;
     }
 
-    public T Create(T data)
+    public virtual T Create(T data)
     {
         var entry = this.m_set.Add(data);
         this.m_context.SaveChanges();
         return entry.Entity;
     }
 
-    public T? GetById(long id)
+    public virtual T? GetById(long id)
     {
-        
         return this.m_set.Find(id);
     }
 
-    public T Update(T update)
+    public virtual T Update(T update)
     {
         var tracked = this.m_set.Find(update.Id);
         if (tracked is null)
@@ -42,7 +41,7 @@ class GenericEntityDbRepository<T> : ICrudRepository<T> where T: class, IEntity
         return entry.Entity;
     }
 
-    public T? Delete(long id)
+    public virtual T? Delete(long id)
     {
         var found = this.GetById(id);
         if (found is null)
@@ -56,7 +55,7 @@ class GenericEntityDbRepository<T> : ICrudRepository<T> where T: class, IEntity
         return found;
     }
 
-    public IReadOnlyList<T> GetAll()
+    public virtual IReadOnlyList<T> GetAll()
     {
         return this.m_set.ToList();
     }
