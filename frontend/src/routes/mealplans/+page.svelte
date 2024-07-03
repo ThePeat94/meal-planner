@@ -41,9 +41,7 @@
 		modalStore.trigger(modal);
 	};
 
-	const handleDialogOpenForDay = (day: number): void => {
-		const date = new Date();
-		date.setDate(day);
+	const handleDialogOpenForDay = (date: Date): void => {
 		modalStore.trigger({ ...modal, meta: { at: date } });
 	};
 
@@ -108,10 +106,10 @@
 						dark:hover:bg-emerald-700"
 					role="cell"
 					tabindex={dayIndex + 1}
-					on:click={() => handleDialogOpenForDay(dayIndex + 1)}
+					on:click={() => handleDialogOpenForDay(dayCard.date)}
 					on:keydown={(k) => {
 						if (k.code === 'Enter') {
-							handleDialogOpenForDay(dayIndex + 1);
+							handleDialogOpenForDay(dayCard.date);
 							return;
 						}
 					}}
