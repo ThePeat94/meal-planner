@@ -2,11 +2,24 @@
 	import { AppBar, getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 	import { getAllMeals, type Meal } from 'api/meals';
 	import PrimaryButton from 'components/buttons/PrimaryButton.svelte';
-	import { format, getDaysInMonth, isSameDay } from 'date-fns';
+	import {
+		addDays,
+		format,
+		getDaysInMonth,
+		getISODay,
+		isSameDay,
+		isSameMonth,
+		isToday,
+	} from 'date-fns';
 	import { sortAsc, sortByDate } from 'utils/sortUtils';
 	import MonthSelector from 'components/date/MonthSelector.svelte';
 
 	const modalStore = getModalStore();
+
+	type DayCardInfo = {
+		date: Date;
+		meals: Meal[];
+	};
 
 	const modal: ModalSettings = {
 		type: 'component',
@@ -33,29 +46,29 @@
 		modalStore.trigger({ ...modal, meta: { at: date } });
 	};
 
-	const getMealsForDay = (day: number): Meal[] => {
+	const getMealsForDate = (date: Date): Meal[] => {
 		if (!$meals.data || $meals.data.length === 0) {
 			return [];
 		}
-		const copiedDate = new Date(selectedDate);
-		copiedDate.setDate(day);
 
-		let foundMeals = $meals.data?.filter((m) => isSameDay(m.at, copiedDate));
+		let foundMeals = $meals.data?.filter((m) => isSameDay(m.at, date));
 		foundMeals = foundMeals.sort((a, b) => sortByDate(a.at, b.at, sortAsc));
 		return foundMeals ?? [];
 	};
 
-	const isToday = (day: number): boolean => {
-		const now = new Date();
-		if (selectedYear != now.getFullYear()) {
-			return false;
+	const createDayCards = (): DayCardInfo[] => {
+		const dayCardInfo: DayCardInfo[] = [];
+		const offset = getISODay(selectedDate) - 1;
+		for (let i = -offset; i < dayCount; i++) {
+			const cardDate = addDays(selectedDate, i);
+
+			dayCardInfo.push({
+				date: cardDate,
+				meals: getMealsForDate(cardDate),
+			});
 		}
 
-		if (selectedMonth != now.getMonth()) {
-			return false;
-		}
-
-		return now.getDate() === day;
+		return dayCardInfo;
 	};
 </script>
 
@@ -79,27 +92,34 @@
 
 <div>
 	<div class="grid grid-cols-7 gap-1">
-		{#each Array(dayCount) as _, dayIndex}
-			<div
-				class="z-0 h-40 rounded-lg bg-emerald-100 transition-colors hover:bg-emerald-500 dark:bg-emerald-900 dark:hover:bg-emerald-700"
-				role="cell"
-				tabindex={dayIndex + 1}
-				on:click={() => handleDialogOpenForDay(dayIndex + 1)}
-				on:keydown={(k) => {
-					if (k.code === 'Enter') {
-						handleDialogOpenForDay(dayIndex + 1);
-						return;
-					}
-				}}
-			>
-				<div class="grid grid-cols-1 gap-1 p-2">
-					<div>
-						{dayIndex + 1}
-						{#if isToday(dayIndex + 1)}TODAY{/if}
-					</div>
-					{#if $meals.isSuccess && !$meals.isRefetching}
-						{#key selectedDate}
-							{#each getMealsForDay(dayIndex + 1) as meal}
+		{#key selectedDate}
+			{#each createDayCards() as dayCard, dayIndex (dayCard.date)}
+				<div
+					class="z-0 h-40 rounded-lg bg-emerald-100 transition-colors hover:bg-emerald-500 {isSameMonth(
+						dayCard.date,
+						selectedDate,
+					)
+						? 'dark:bg-emerald-900'
+						: 'dark:bg-gray-700'}
+						dark:hover:bg-emerald-700"
+					role="cell"
+					tabindex={dayIndex + 1}
+					on:click={() => handleDialogOpenForDay(dayIndex + 1)}
+					on:keydown={(k) => {
+						if (k.code === 'Enter') {
+							handleDialogOpenForDay(dayIndex + 1);
+							return;
+						}
+					}}
+				>
+					<div class="grid grid-cols-1 gap-1 p-2">
+						<div>
+							{dayCard.date.getDate()}
+							{format(dayCard.date, 'E')}
+							{#if isToday(dayCard.date)}TODAY{/if}
+						</div>
+						{#if $meals.isSuccess && !$meals.isRefetching}
+							{#each dayCard.meals as meal}
 								<div
 									class="z-10 rounded-lg bg-sky-300 p-1 transition-colors hover:bg-sky-500 dark:bg-sky-600"
 									role="cell"
@@ -111,10 +131,10 @@
 									{format(meal.at, 'HH:mm')}
 								</div>
 							{/each}
-						{/key}
-					{/if}
+						{/if}
+					</div>
 				</div>
-			</div>
-		{/each}
+			{/each}
+		{/key}
 	</div>
 </div>
