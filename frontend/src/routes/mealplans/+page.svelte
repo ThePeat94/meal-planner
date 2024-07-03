@@ -13,6 +13,7 @@
 	} from 'date-fns';
 	import { sortAsc, sortByDate } from 'utils/sortUtils';
 	import MonthSelector from 'components/date/MonthSelector.svelte';
+	import WeekDayColumnHeader from 'components/meals/WeekDayColumnHeader.svelte';
 
 	const modalStore = getModalStore();
 
@@ -92,6 +93,9 @@
 
 <div>
 	<div class="grid grid-cols-7 gap-1">
+		{#each Array(7) as _, dayIdx}
+			<WeekDayColumnHeader dayIndex={dayIdx} />
+		{/each}
 		{#key selectedDate}
 			{#each createDayCards() as dayCard, dayIndex (dayCard.date)}
 				<div
@@ -115,7 +119,6 @@
 					<div class="grid grid-cols-1 gap-1 p-2">
 						<div>
 							{dayCard.date.getDate()}
-							{format(dayCard.date, 'E')}
 							{#if isToday(dayCard.date)}TODAY{/if}
 						</div>
 						{#if $meals.isSuccess && !$meals.isRefetching}
