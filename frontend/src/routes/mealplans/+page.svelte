@@ -2,25 +2,14 @@
 	import { AppBar, getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 	import { getAllMeals, type Meal } from 'api/meals';
 	import PrimaryButton from 'components/buttons/PrimaryButton.svelte';
-	import {
-		addDays,
-		format,
-		getDaysInMonth,
-		getISODay,
-		isSameDay,
-		isSameMonth,
-		isToday,
-	} from 'date-fns';
+	import { addDays, endOfMonth, getDaysInMonth, getISODay, isSameDay, isSameMonth } from 'date-fns';
 	import { sortAsc, sortByDate } from 'utils/sortUtils';
 	import MonthSelector from 'components/date/MonthSelector.svelte';
 	import WeekDayColumnHeader from 'components/meals/WeekDayColumnHeader.svelte';
+	import type { DayCellInfo } from 'components/meals/dayCell/type';
+	import DayCell from 'components/meals/dayCell/DayCell.svelte';
 
 	const modalStore = getModalStore();
-
-	type DayCardInfo = {
-		date: Date;
-		meals: Meal[];
-	};
 
 	const modal: ModalSettings = {
 		type: 'component',
@@ -55,10 +44,11 @@
 		return foundMeals ?? [];
 	};
 
-	const createDayCards = (): DayCardInfo[] => {
-		const dayCardInfo: DayCardInfo[] = [];
-		const offset = getISODay(selectedDate) - 1;
-		for (let i = -offset; i < dayCount; i++) {
+	const createDayCards = (): DayCellInfo[] => {
+		const dayCardInfo: DayCellInfo[] = [];
+		const offsetPreviousMonths = getISODay(selectedDate) - 1;
+		const offsetNextMonth = 7 - getISODay(endOfMonth(selectedDate));
+		for (let i = -offsetPreviousMonths; i < dayCount + offsetNextMonth; i++) {
 			const cardDate = addDays(selectedDate, i);
 
 			dayCardInfo.push({
@@ -96,45 +86,12 @@
 		{/each}
 		{#key selectedDate}
 			{#each createDayCards() as dayCard, dayIndex (dayCard.date)}
-				<div
-					class="z-0 h-40 rounded-lg bg-emerald-100 transition-colors hover:bg-emerald-500 {isSameMonth(
-						dayCard.date,
-						selectedDate,
-					)
-						? 'dark:bg-emerald-900'
-						: 'dark:bg-gray-700'}
-						dark:hover:bg-emerald-700"
-					role="cell"
-					tabindex={dayIndex + 1}
-					on:click={() => handleDialogOpenForDay(dayCard.date)}
-					on:keydown={(k) => {
-						if (k.code === 'Enter') {
-							handleDialogOpenForDay(dayCard.date);
-							return;
-						}
-					}}
-				>
-					<div class="grid grid-cols-1 gap-1 p-2">
-						<div>
-							{dayCard.date.getDate()}
-							{#if isToday(dayCard.date)}TODAY{/if}
-						</div>
-						{#if $meals.isSuccess && !$meals.isRefetching}
-							{#each dayCard.meals as meal}
-								<div
-									class="z-10 rounded-lg bg-sky-300 p-1 transition-colors hover:bg-sky-500 dark:bg-sky-600"
-									role="cell"
-									tabindex={dayIndex + 1}
-									on:click={(mouseEvent) => mouseEvent.stopPropagation()}
-									on:keydown={(keyEvent) => keyEvent.stopPropagation()}
-								>
-									{meal.recipe.name}
-									{format(meal.at, 'HH:mm')}
-								</div>
-							{/each}
-						{/if}
-					</div>
-				</div>
+				<DayCell
+					dayCellInfo={dayCard}
+					isSameMonth={isSameMonth(dayCard.date, selectedDate)}
+					tabIndex={dayIndex}
+					on:createMeal={() => handleDialogOpenForDay(dayCard.date)}
+				/>
 			{/each}
 		{/key}
 	</div>
